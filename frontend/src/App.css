@@ -1,7 +1,27 @@
 .App {
   font-family: Arial, sans-serif;
+  padding: 30px;
+  text-align: center;
+}
+
+.github-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 20px;
-  text-align: left;
+  font-size: 16px;
+  text-decoration: none;
+  color: royalblue;
+}
+
+.github-link:hover {
+  text-decoration: underline;
+}
+
+.github-logo {
+  width: 25px;
+  height: 25px;
+  margin-right: 8px;
 }
 
 h1 {

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
+
 const Timer = ({ customTime }) => {
-    const timeLimit = 5 || customTime
+    const timeLimit = 30 || customTime // default 30 seconds, unless specified in component prop
     const [countdown, setCountdown] = useState(timeLimit)
-    const [lastRefreshed, setLastRefreshed] = useState(new Date())
+    const [lastRefreshed,] = useState(new Date())
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -15,12 +16,12 @@ const Timer = ({ customTime }) => {
         }, 1000)
 
         return () => clearInterval(interval)
-    }, []);
+    }, [timeLimit]);
 
     return (
-        <div>
-            <p>Time until next refresh: {countdown}s</p>
-            <p>Last refreshed: {lastRefreshed.toLocaleTimeString()}</p>
+        <div style={{ fontSize: '16px' }}>
+            <p>Time until next refresh: <span style={{ color: 'darkred' }}>{countdown}</span></p>
+            <p>Last refreshed: <span style={{ color: 'darkgreen' }}>{lastRefreshed.toLocaleTimeString()}</span></p>
         </div>
     );
 };
