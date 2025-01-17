@@ -1,7 +1,7 @@
 # Healthchecker
 A mini project that regularly performs API healthchecks on configured endpoints, created using create-react-app and golang.
 
-## Setup instructions
+## Setup
 1. Install dependencies for go
 ```
 go mod tidy
