@@ -5,9 +5,10 @@ import axios from "axios"
 const StatusList = () => {
     const [statuses, setStatuses] = useState([])
     const [loading, setLoading] = useState(true)
+    const [animateKey, setAnimateKey] = useState(0)
 
     const backendUrl = process.env.REACT_APP_BACKEND_URL
-    const timeLimit = 30000
+    const timeLimit = 5000
 
     const fetchStatuses = async () => {
         try {
@@ -21,7 +22,10 @@ const StatusList = () => {
 
     useEffect(() => {
         fetchStatuses()
-        const intervalId = setInterval(fetchStatuses, timeLimit)
+        const intervalId = setInterval(() => {
+            fetchStatuses()
+            setAnimateKey((prevKey) => !prevKey)
+        }, timeLimit)
         return () => clearInterval(intervalId)
         // eslint-disable-next-line
     }, [])
@@ -48,10 +52,12 @@ const StatusList = () => {
                                             {status?.url}
                                         </td>
                                         <td
+                                            key={animateKey}
                                             style={{
                                                 padding: "8px",
                                                 border: "2px solid #ddd",
                                                 color: status?.status === "live" ? "green" : "red",
+                                                animation: status?.status ? "bounceOut 1s ease" : "",
                                             }}
                                         >
                                             {status?.status?.toUpperCase()}
