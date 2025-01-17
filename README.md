@@ -16,7 +16,9 @@ make run
 cd frontend && npm install
 ```
 
-2. Run frontend - http://localhost:3000
+4. Run frontend - http://localhost:3000
 ```
 npm run start
 ```
+
+5. Frontend should display endpoints configured in config.yaml. The endpoints return 200 or 404 status in a random manner.
