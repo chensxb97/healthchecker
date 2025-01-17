@@ -1,0 +1,4 @@
+endpoints:
+  - url: "http://localhost:8080/endpoint1"
+  - url: "https://localhost:8080/endpoint2"
+  - url: "https://localhost:8080/endpoint3"
