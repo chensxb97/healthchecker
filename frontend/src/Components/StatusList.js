@@ -42,7 +42,7 @@ const StatusList = () => {
                             <thead>
                                 <tr>
                                     <th style={{ padding: "8px", border: "2px solid #ddd" }}>Endpoint</th>
-                                    <th style={{ padding: "8px", border: "2px solid #ddd" }}>Current Status</th>
+                                    <th style={{ padding: "8px", border: "2px solid #ddd" }}>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
