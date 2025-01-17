@@ -20,8 +20,16 @@ const Timer = ({ customTime }) => {
 
     return (
         <div style={{ fontSize: '16px' }}>
-            <p>Time until next refresh: <span style={{ color: 'black' }}>{countdown}</span></p>
-            <p>Last refreshed: <span style={{ color: 'royalblue' }}>{lastRefreshed.toLocaleTimeString()}</span></p>
+            <p>Time until next refresh: <span style={{ color: 'royalblue' }}>{countdown}</span></p>
+            <p>Last refreshed: <span style={{ color: 'royalblue' }}>
+                {lastRefreshed.toLocaleString('en-US', {
+                    year: 'numeric', // Full year (e.g., 2025)
+                    month: 'short',   // Full name of the month (e.g., January)
+                    day: 'numeric',  // Numeric day of the month (e.g., 18)
+                    hour: 'numeric', // Hour in 12-hour format
+                    minute: '2-digit', // Minutes with leading zero if needed
+                    hour12: true     // 12-hour format with AM/PM
+                })}</span></p>
         </div>
     );
 };

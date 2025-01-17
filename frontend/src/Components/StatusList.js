@@ -41,20 +41,20 @@ const StatusList = () => {
                         <table style={{ borderCollapse: "collapse", border: "3px solid grey" }}>
                             <thead>
                                 <tr>
-                                    <th style={{ padding: "8px", border: "2px solid #ddd" }}>Endpoint</th>
-                                    <th style={{ padding: "8px", border: "2px solid #ddd" }}>Status</th>
+                                    <th style={{ padding: "10px", border: "2px solid #ddd" }}>Endpoint</th>
+                                    <th style={{ padding: "10px", border: "2px solid #ddd" }}>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {statuses.map((status) => (
                                     <tr key={status?.url}>
-                                        <td style={{ padding: "8px", border: "2px solid #ddd" }}>
+                                        <td style={{ padding: "15px", border: "2px solid #ddd" }}>
                                             {status?.url}
                                         </td>
                                         <td
                                             key={animateKey}
                                             style={{
-                                                padding: "8px",
+                                                padding: "15px",
                                                 border: "2px solid #ddd",
                                                 color: status?.status === "live" ? "green" : "red",
                                                 animation: status?.status ? "bounceOut 1s ease" : "",
