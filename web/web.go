@@ -21,6 +21,7 @@ func NewServer(hc *health.HealthChecker) *Server {
 func (s *Server) Start() {
 	mux := http.NewServeMux()
 
+	mux.HandleFunc("/", s.rootHandler)
 	mux.HandleFunc("/status", s.statusHandler)
 	mux.HandleFunc("/endpoint1", s.randomResponse)
 	mux.HandleFunc("/endpoint2", s.randomResponse)
@@ -35,6 +36,11 @@ func (s *Server) Start() {
 	}).Handler(mux)
 
 	http.ListenAndServe(":8080", handler)
+}
+
+func (s *Server) rootHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(`Congratulations for making it this far. Welcome to my healthchecker app!`)
 }
 
 func (s *Server) statusHandler(w http.ResponseWriter, r *http.Request) {
