@@ -44,7 +44,6 @@
   }
 }
 
-/* You can apply the bounceOut animation conditionally in the JS above */
 .bounceOut {
   animation: bounceOut 1s ease;
 }
