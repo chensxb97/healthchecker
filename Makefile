@@ -5,7 +5,7 @@ CONFIG := ./config.yaml
 # Commands
 run:
 	@echo "Running $(APP_NAME)..."
-	go run $(SRC)
+	go run $(SRC) $(CONFIG)
 
 build:
 	@echo "Building $(APP_NAME)..."
