@@ -2,7 +2,7 @@ package main
 
 import (
 	"healthchecker/config"
-	"healthchecker/internal/health"
+	"healthchecker/internal"
 	"healthchecker/web"
 	"log"
 	"os"
@@ -16,24 +16,16 @@ func main() {
 
 	kingpin.MustParse(app.Parse(os.Args[1:]))
 
-	cfg, err := config.LoadConfig(*configFile)
+	err := config.LoadConfig(*configFile)
 	if err != nil {
 		log.Fatalf("Failed to load configuration: %v", err)
 	}
 
 	// Initialize health checker
-	healthChecker := health.NewHealthChecker()
-	go healthChecker.CheckHealth(getURLs(cfg.Endpoints))
+	healthChecker := internal.NewHealthChecker()
+	go healthChecker.CheckHealth(config.GetEndpoints())
 
 	// Start web server
 	server := web.NewServer(healthChecker)
 	server.Start()
-}
-
-func getURLs(endpoints []config.Endpoint) []string {
-	urls := make([]string, len(endpoints))
-	for i, endpoint := range endpoints {
-		urls[i] = endpoint.URL
-	}
-	return urls
 }

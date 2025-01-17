@@ -2,7 +2,7 @@ package web
 
 import (
 	"encoding/json"
-	"healthchecker/internal/health"
+	"healthchecker/internal"
 	"math/rand"
 	"net/http"
 	"time"
@@ -11,10 +11,10 @@ import (
 )
 
 type Server struct {
-	HealthChecker *health.HealthChecker
+	HealthChecker *internal.HealthChecker
 }
 
-func NewServer(hc *health.HealthChecker) *Server {
+func NewServer(hc *internal.HealthChecker) *Server {
 	return &Server{HealthChecker: hc}
 }
 

@@ -14,15 +14,24 @@ type Config struct {
 	Endpoints []Endpoint `yaml:"endpoints"`
 }
 
-func LoadConfig(filename string) (*Config, error) {
+var cfg Config
+
+func LoadConfig(filename string) error {
 	data, err := os.ReadFile(filename)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	var cfg Config
 	if err := yaml.Unmarshal(data, &cfg); err != nil {
-		return nil, err
+		return err
 	}
-	return &cfg, nil
+	return nil
+}
+
+func GetEndpoints() []string {
+	urls := make([]string, len(cfg.Endpoints))
+	for i, endpoint := range cfg.Endpoints {
+		urls[i] = endpoint.URL
+	}
+	return urls
 }
