@@ -1,30 +1,25 @@
-## Healthchecker
+# Healthchecker
 A mini project created using create-react-app and golang.
 
-### Summary
+## Summary
 A dashboard that regularly performs API healthchecks on configured endpoints.
 
-### Run Backend
-1. Install dependencies
+### Setup instructions
+1. Install dependencies for go
 ```
 go mod tidy
 ```
 
-2. Run web server - http://localhost:8080
+2. Run backend - http://localhost:8080.
 ```
 make run
 ```
-
-3. Validate endpoints' statuses - http://localhost:8080/status
-
-### Run Frontend
-1. Install dependencies
+3. Install dependencies for react
 ```
-npm install
+cd frontend && npm install
 ```
 
 2. Run frontend - http://localhost:3000
-
 ```
 npm run start
 ```
