@@ -1,10 +1,12 @@
 package internal
 
 import (
+	"log"
 	"net/http"
 	"sync"
-	"time"
 )
+
+var inspectionCount = 0
 
 type EndpointStatus struct {
 	URL    string `json:"url"`
@@ -23,25 +25,31 @@ func NewHealthChecker() *HealthChecker {
 }
 
 func (hc *HealthChecker) CheckHealth(endpoints []string) {
-	for {
-		hc.mu.Lock()
-		hc.statuses = []EndpointStatus{}
+	var wg sync.WaitGroup
+	hc.statuses = []EndpointStatus{}
 
-		for _, endpoint := range endpoints {
+	for _, endpoint := range endpoints {
+		wg.Add(1)
+		go func(endpoint string) {
+			defer wg.Done()
 			resp, err := http.Get(endpoint)
 			status := "down"
 			if err == nil && resp.StatusCode == 200 {
 				status = "live"
 			}
+			hc.mu.Lock()
 			hc.statuses = append(hc.statuses, EndpointStatus{
 				URL:    endpoint,
 				Status: status,
 			})
-		}
-
-		hc.mu.Unlock()
-		time.Sleep(30 * time.Second)
+			log.Printf("Checked %s: %s\n", endpoint, status) // Logging
+			hc.mu.Unlock()
+		}(endpoint)
 	}
+	wg.Wait()
+	inspectionCount += 1
+	log.Printf("Checked all endpoints!")
+	log.Printf("Inspection Count: %d", inspectionCount)
 }
 
 func (hc *HealthChecker) GetStatuses() []EndpointStatus {
