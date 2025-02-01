@@ -24,6 +24,21 @@ func NewHealthChecker() *HealthChecker {
 	}
 }
 
+func checkEndpoint(endpoint string, results chan<- EndpointStatus, wg *sync.WaitGroup) {
+	defer wg.Done()
+	resp, err := http.Get(endpoint)
+	status := "down"
+	if err == nil && resp.StatusCode == 200 {
+		status = "live"
+	}
+
+	results <- EndpointStatus{
+		URL:    endpoint,
+		Status: status,
+	}
+	log.Printf("Checked %s: %s\n", endpoint, status) // Logging
+}
+
 func (hc *HealthChecker) CheckHealth(endpoints []string) {
 	var wg sync.WaitGroup
 	hc.statuses = []EndpointStatus{}
@@ -31,22 +46,11 @@ func (hc *HealthChecker) CheckHealth(endpoints []string) {
 	for _, endpoint := range endpoints {
 		wg.Add(1)
 		go func(endpoint string) {
-			defer wg.Done()
-			resp, err := http.Get(endpoint)
-			status := "down"
-			if err == nil && resp.StatusCode == 200 {
-				status = "live"
-			}
-
-			results <- EndpointStatus{
-				URL:    endpoint,
-				Status: status,
-			}
-			log.Printf("Checked %s: %s\n", endpoint, status) // Logging
+			checkEndpoint(endpoint, results, &wg)
 		}(endpoint)
 	}
 
-	// Make wg.Wait a goroutine to prevent unbuffered channel dead
+	// Make wg.Wait a goroutine to prevent unbuffered channel deadlock
 	go func() {
 		wg.Wait()      // wait for all go routines to finish by wg.Done()
 		close(results) // close channel
