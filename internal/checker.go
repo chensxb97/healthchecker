@@ -27,7 +27,7 @@ func NewHealthChecker() *HealthChecker {
 func (hc *HealthChecker) CheckHealth(endpoints []string) {
 	var wg sync.WaitGroup
 	hc.statuses = []EndpointStatus{}
-
+	results := make(chan EndpointStatus)
 	for _, endpoint := range endpoints {
 		wg.Add(1)
 		go func(endpoint string) {
@@ -37,18 +37,26 @@ func (hc *HealthChecker) CheckHealth(endpoints []string) {
 			if err == nil && resp.StatusCode == 200 {
 				status = "live"
 			}
-			hc.mu.Lock()
-			hc.statuses = append(hc.statuses, EndpointStatus{
+
+			results <- EndpointStatus{
 				URL:    endpoint,
 				Status: status,
-			})
+			}
 			log.Printf("Checked %s: %s\n", endpoint, status) // Logging
-			hc.mu.Unlock()
 		}(endpoint)
 	}
-	wg.Wait()
+
+	// Make wg.Wait a goroutine to prevent unbuffered channel dead
+	go func() {
+		wg.Wait()      // wait for all go routines to finish by wg.Done()
+		close(results) // close channel
+	}()
+
+	for status := range results {
+		hc.statuses = append(hc.statuses, status)
+	}
+
 	inspectionCount += 1
-	log.Printf("Checked all endpoints!")
 	log.Printf("Inspection Count: %d", inspectionCount)
 }
 
